@@ -1,5 +1,6 @@
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -78,7 +79,7 @@ public class GameMain {
             String strKeyHmac = new String(byteKeyHmac, ch);
             System.out.println("HMAC key: " + strKeyHmac);
 
-        } catch (NullPointerException | NumberFormatException e) {
+        } catch (NullPointerException | NumberFormatException | InputMismatchException e) {
             System.out.println("you didn't enter a number or an empty string");
             return;
         }
