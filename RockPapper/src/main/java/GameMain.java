@@ -1,11 +1,12 @@
-import java.nio.charset.Charset;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class GameMain {
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         try {
             EnterDateConsole enterDateConsole = new EnterDateConsole();
             System.out.println("enter odd non-repeating numbers");
@@ -35,13 +36,12 @@ public class GameMain {
             SecurityRandomNumber securityRandomNumber = new SecurityRandomNumber();
             GenerateComputer generateComputer = new GenerateComputer();
             GenerateHmacKey generateHmacKey = new GenerateHmacKey();
-            Charset ch = Charset.forName("windows-1251");
-            byte[] bytes = new byte[16];
-            byte[] byteKeyHmac = generateHmacKey.generate(bytes);
-            byte[] byteHmac = generateHmacKey.generate(securityRandomNumber.rand(bytes));
-            String strHmac = new String(byteHmac, ch);
-            System.out.println("HMAC: " + strHmac);
-            int numberComputer = generateComputer.randomComputer(list.size(), byteHmac);
+            byte[] byteKeyGeneration = securityRandomNumber.rand();
+            int numberComputers = generateComputer.randomComputer(list.size(), byteKeyGeneration);
+            System.out.println(numberComputers);
+            byte[] digest = generateHmacKey.generate(byteKeyGeneration, numberComputers);
+            System.out.println("HMAC: " + BytesToHex.bytesToHex(digest));
+            int numberComputer = generateComputer.randomComputer(list.size(), byteKeyGeneration);
             System.out.println("0 - Exit");
             for (int i = 0; i < list.size(); i++) {
                 System.out.println((i + 1) + " - " + list.get(i));
@@ -76,8 +76,7 @@ public class GameMain {
                     System.out.println("You lose");
                 }
             }
-            String strKeyHmac = new String(byteKeyHmac, ch);
-            System.out.println("HMAC key: " + strKeyHmac);
+            System.out.println("HMAC key: " + BytesToHex.bytesToHex(byteKeyGeneration));
 
         } catch (NullPointerException | NumberFormatException | InputMismatchException e) {
             System.out.println("you didn't enter a number or an empty string");
