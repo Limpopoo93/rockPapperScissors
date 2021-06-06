@@ -18,11 +18,11 @@ public class GameMain {
             for (Integer s : list) {
                 if (s < 0) {
                     System.out.println("the number must be greater than 0");
-                    list = enterDateConsole.enterDateForConsole();
+                    return;
                 }
                 if (s % 2 == 0) {
                     System.out.println("the number is even you must enter an odd number");
-                    list = enterDateConsole.enterDateForConsole();
+                    return;
                 }
                 for (int i = 0; i < list.size(); i++) {
                     for (int j = i + 1; j < list.size(); j++) {
@@ -42,6 +42,9 @@ public class GameMain {
             System.out.println("HMAC: " + BytesToHex.bytesToHex(digest));
             int numberComputer = generateComputer.randomComputer(list.size(), byteKeyGeneration);
             System.out.println("0 - Exit");
+            for (int i = 0; i < list.size(); i++) {
+                System.out.println((i + 1) + " - " + list.get(i));
+            }
             System.out.println("enter your move:");
             Scanner scanner = new Scanner(System.in);
             int input = scanner.nextInt();
